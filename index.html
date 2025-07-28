@@ -614,9 +614,6 @@
       </form>
     </div>
   </div>
-  
-
-
 
     <!-- All JavaScript files
     ================================================== -->
@@ -647,141 +644,154 @@
         });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const form = document.getElementById('serviceRequestForm');
-      let isManuallySubmitted = false;
-    
-      // Set the flag on manual submit click
-      const submitBtn = document.querySelector('#serviceRequestForm button[type="submit"]');
-      submitBtn.addEventListener('click', function () {
-        isManuallySubmitted = true;
-      });
-    
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-    
-        if (!isManuallySubmitted) return;
-        isManuallySubmitted = false;
-    
-        const name = document.getElementById('nameInput').value.trim();
-        const email = document.getElementById('emailInput').value.trim();
-        const phone = document.getElementById('phoneInput').value.trim();
-        const message = document.getElementById('messageInput').value.trim();
-        const service = document.getElementById('serviceInput').value.trim();
-    
-        const payload = { name, email, phone, message, service };
-    
-        const alertBox = document.getElementById('formAlert');
-        alertBox.style.display = 'none';
-        alertBox.className = 'alert';
-    
-        fetch("https://script.google.com/macros/s/AKfycbzb_hiLwGleSb_3QwHQnL_O_F4fzJXlmqByT5FUL5vDwqn287_JYSiHNg5r1o8OOi6QVQ/exec", {
-          method: "POST",
-          body: JSON.stringify(payload),
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then(res => res.json())
-        .then(response => {
-          if (response.result === "success") {
-            alertBox.classList.add('alert-success');
-            alertBox.textContent = "✅ Thank you! Your request has been received.";
-            alertBox.style.display = 'block';
-            form.reset();
-          } else {
-            alertBox.classList.add('alert-danger');
-            alertBox.textContent = "⚠️ Something went wrong. Please try again.";
-            alertBox.style.display = 'block';
-          }
-        })
-        .catch(err => {
-          alertBox.classList.add('alert-danger');
-          alertBox.textContent = "⚠️ Network error. Please try again later.";
-          alertBox.style.display = 'block';
-        });
-      });
-    });
-    </script>    
+
     
     <script>
     document.getElementById("year").textContent = new Date().getFullYear();
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        const buttons = document.querySelectorAll('.get-connect-btn');
-        const serviceInput = document.getElementById('serviceInput');
-        const selectedService = document.getElementById('selectedService');
-        const form = document.getElementById('serviceRequestForm');
-        
-        const fields = [
-            {
-                input: document.getElementById('nameInput'),
-                error: document.getElementById('nameError'),
-                validate: value => value.trim() !== ''
-            },
-            {
-                input: document.getElementById('emailInput'),
-                error: document.getElementById('emailError'),
-                validate: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-            },
-            {
-                input: document.getElementById('messageInput'),
-                error: document.getElementById('messageError'),
-                validate: value => value.trim() !== ''
-            },
-            {
-                input: document.getElementById('phoneInput'),
-                error: document.getElementById('phoneError'),
-                validate: value => /^\+?[0-9]{7,15}$/.test(value.trim())
-            }
-        ];
-        
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-            const serviceName = button.getAttribute('data-service') || 'Our Service';
-            const formatted = serviceName.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-        
-            serviceInput.value = serviceName;
-            selectedService.textContent = formatted;
-        
-            fields.forEach(f => {
-                f.error.style.display = 'none';
-                f.input.classList.remove('is-invalid');
-            });
-        
-            form.reset();
-            });
-        });
-        
-        fields.forEach(f => {
-            f.input.addEventListener('input', () => {
-            f.input.classList.remove('is-invalid');
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const buttons = document.querySelectorAll('.get-connect-btn');
+      const serviceInput = document.getElementById('serviceInput');
+      const selectedService = document.getElementById('selectedService');
+      const form = document.getElementById('serviceRequestForm');
+    
+      const fields = [
+        {
+          input: document.getElementById('nameInput'),
+          error: document.getElementById('nameError'),
+          validate: value => value.trim() !== ''
+        },
+        {
+          input: document.getElementById('emailInput'),
+          error: document.getElementById('emailError'),
+          validate: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+        },
+        {
+          input: document.getElementById('messageInput'),
+          error: document.getElementById('messageError'),
+          validate: value => value.trim() !== ''
+        },
+        {
+          input: document.getElementById('phoneInput'),
+          error: document.getElementById('phoneError'),
+          validate: value => /^\+?[0-9]{7,15}$/.test(value.trim())
+        }
+      ];
+    
+      buttons.forEach(button => {
+        button.addEventListener('click', () => {
+          const serviceName = button.getAttribute('data-service') || 'Our Service';
+          const formatted = serviceName.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    
+          serviceInput.value = serviceName;
+          selectedService.textContent = formatted;
+    
+          fields.forEach(f => {
             f.error.style.display = 'none';
-        
-            if (f.input.id === 'phoneInput') {
-                f.input.value = f.input.value.replace(/[^0-9+]/g, '');
-            }
-            });
+            f.input.classList.remove('is-invalid');
+          });
+    
+          form.reset();
         });
-        
-        form.addEventListener('submit', function (e) {
-            let isValid = true;
-        
-            fields.forEach(f => {
-            const value = f.input.value;
-            if (!f.validate(value)) {
-                f.error.style.display = 'block';
-                f.input.classList.add('is-invalid');
-                isValid = false;
-            }
-            });
-        
-            if (!isValid) e.preventDefault();
+      });
+    
+      fields.forEach(f => {
+        f.input.addEventListener('input', () => {
+          f.input.classList.remove('is-invalid');
+          f.error.style.display = 'none';
+          if (f.input.id === 'phoneInput') {
+            f.input.value = f.input.value.replace(/[^0-9+]/g, '');
+          }
         });
+      });
+    
+      function saveLeadToLocalStorage(lead) {
+        const leads = JSON.parse(localStorage.getItem("intellivanceLeads") || "[]");
+        leads.push(lead);
+        localStorage.setItem("intellivanceLeads", JSON.stringify(leads));
+      }
+    
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        let isValid = true;
+    
+        fields.forEach(f => {
+          const value = f.input.value;
+          if (!f.validate(value)) {
+            f.error.style.display = 'block';
+            f.input.classList.add('is-invalid');
+            isValid = false;
+          }
         });
+    
+        if (!isValid) return;
+    
+        const lead = {
+          name: document.getElementById('nameInput').value.trim(),
+          email: document.getElementById('emailInput').value.trim(),
+          phone: document.getElementById('phoneInput').value.trim(),
+          message: document.getElementById('messageInput').value.trim(),
+          service: document.getElementById('serviceInput').value.trim(),
+          submittedAt: new Date().toISOString()
+        };
+    
+        saveLeadToLocalStorage(lead);
+    
+        const alertBox = document.getElementById('formAlert');
+        alertBox.className = 'alert alert-success';
+        alertBox.textContent = "✅ Thank you! Your request has been saved locally.";
+        alertBox.style.display = 'block';
+    
+        form.reset();
+      });
+    
+      function convertLeadsToCSV(leads) {
+        const rows = [["Name", "Email", "Phone", "Message", "Service", "Submitted At"]];
+        leads.forEach(l => {
+          rows.push([
+            l.name,
+            l.email,
+            l.phone,
+            l.message,
+            l.service,
+            l.submittedAt
+          ]);
+        });
+    
+        return rows.map(row => row.map(val => `"${val.replace(/"/g, '""')}"`).join(",")).join("\n");
+      }
+    
+      window.downloadLeadsFile = function () {
+    
+        const leads = JSON.parse(localStorage.getItem("intellivanceLeads") || "[]");
+        if (!leads.length) {
+          alert("No leads saved yet.");
+          return;
+        }
+    
+        const csv = convertLeadsToCSV(leads);
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "intellivance-leads.csv";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      };
+    
+      fetch("https://api.ipify.org?format=json")
+        .then(res => res.json())
+        .then(data => {
+        })
+        .catch(err => console.error("Failed to fetch IP:", err));
+    });
     </script>
+    
     
 </body>
 
